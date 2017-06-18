@@ -1,5 +1,5 @@
 app.factory('ws', function(){
 
-  return path => '/ws/' + path
+	return path => '/ws/' + path
 
 })
