@@ -7,6 +7,7 @@ import (
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/mux"
 	"github.com/joshlgrossman/go-ang/server/db"
 	"github.com/joshlgrossman/go-ang/server/routes"
 )
@@ -21,8 +22,13 @@ func main() {
 		return
 	}
 
+	router := mux.NewRouter()
+	router.HandleFunc("/ws/tasks/{id}", routes.TaskRoute)
+	router.HandleFunc("/ws/tasks", routes.TaskRoute)
+	router.HandleFunc("/ws/test", routes.Test)
+
+	http.Handle("/ws/", router)
 	http.HandleFunc("/", routes.Static("client/build/"))
-	http.HandleFunc("/ws/test", routes.Test)
 	http.ListenAndServe(":8080", nil)
 
 }
