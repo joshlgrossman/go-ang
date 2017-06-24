@@ -14,7 +14,6 @@ app.component('taskForm', {
 
 		this.submit = () => {
 			$http.post(ws('tasks'), angular.copy(this.task)).then(response => {
-				console.log(response)
 				if(!response.data.error){
 					$scope.$emit('task:added', response.data)
 				}
