@@ -1,0 +1,3 @@
+<input class="title" ng:model="$ctrl.task.title" placeholder="Title"/>
+<textarea class="description" ng:model="$ctrl.task.description" placeholder="Description"></textarea>
+<button class="submit button" ng:click="$ctrl.submit()" ng:disabled="!$ctrl.task.title || !$ctrl.task.description">Add</button>
