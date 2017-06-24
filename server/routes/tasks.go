@@ -12,11 +12,23 @@ import (
 	"github.com/joshlgrossman/go-ang/server/models"
 )
 
+const tableName = "tasks"
+
+var errorJSON = struct {
+	err bool
+}{
+	true,
+}
+var successJSON = struct {
+	success bool
+}{
+	true,
+}
+
 func get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	projection := "title, description, status"
-	tableName := "tasks"
 
 	taskRows := squirrel.
 		Select(projection).
@@ -47,12 +59,46 @@ func get(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func post(w http.ResponseWriter, r *http.Request) {
+
+	decoder := json.NewDecoder(r.Body)
+	var taskModel models.Task
+
+	err := decoder.Decode(&taskModel)
+	taskModel.Status = "pending"
+
+	if err != nil {
+		result, _ := json.Marshal(errorJSON)
+		w.Write(result)
+	} else {
+		defer r.Body.Close()
+
+		_, err := squirrel.
+			Insert(tableName).
+			Columns("title", "description", "status").
+			Values(taskModel.Title, taskModel.Description, taskModel.Status).
+			RunWith(db.Conn).
+			Query()
+
+		if err != nil {
+			result, _ := json.Marshal(errorJSON)
+			w.Write(result)
+		} else {
+			result, _ := json.Marshal(taskModel)
+			w.Write(result)
+		}
+	}
+
+}
+
 // TaskRoute endpoint for task related CRUD operations
 func TaskRoute(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case http.MethodGet:
 		get(w, r)
+	case http.MethodPost:
+		post(w, r)
 	default:
 		w.Write([]byte("Unsupported method"))
 	}
