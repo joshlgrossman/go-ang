@@ -1,5 +1,2 @@
-<div ng:repeat="task in $ctrl.tasks" data-id="{{task.ID}}">
-	<div>{{task.Title}}: {{task.Status}}</div>
-	<div>{{task.Description}}</div>
-</div>
+<task ng:repeat="task in $ctrl.tasks" task="task"></task>
 <task-form></task-form>

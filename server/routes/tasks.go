@@ -103,6 +103,37 @@ func post(w http.ResponseWriter, r *http.Request) {
 
 func put(w http.ResponseWriter, r *http.Request) {
 
+	decoder := json.NewDecoder(r.Body)
+	var taskModel models.Task
+
+	err := decoder.Decode(&taskModel)
+
+	if err != nil {
+		result, _ := json.Marshal(errorJSON)
+		w.Write(result)
+	} else {
+		defer r.Body.Close()
+
+		_, err := squirrel.
+			Update(tableName).
+			SetMap(map[string]interface{}{
+				"title":       taskModel.Title,
+				"description": taskModel.Description,
+				"status":      taskModel.Status,
+			}).
+			Where(squirrel.Eq{"id": taskModel.ID}).
+			RunWith(db.Conn).
+			Query()
+
+		if err != nil {
+			result, _ := json.Marshal(errorJSON)
+			w.Write(result)
+		} else {
+			result, _ := json.Marshal(successJSON)
+			w.Write(result)
+		}
+	}
+
 }
 
 // TaskRoute endpoint for task related CRUD operations
@@ -113,6 +144,8 @@ func TaskRoute(w http.ResponseWriter, r *http.Request) {
 		get(w, r)
 	case http.MethodPost:
 		post(w, r)
+	case http.MethodPut:
+		put(w, r)
 	default:
 		w.Write([]byte("Unsupported method"))
 	}

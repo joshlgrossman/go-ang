@@ -13,10 +13,11 @@ app.component('taskForm', {
 		}
 
 		this.submit = () => {
-			$http.post(ws('tasks'), angular.copy(this.task)).then(response => {
-				if(!response.data.error){
+			$http.post(ws.tasks, angular.copy(this.task)).then(response => {
+
+				if(!response.data.error)
 					$scope.$emit('task:added', response.data)
-				}
+
 			}).catch(console.log)
 			
 			this.reset()

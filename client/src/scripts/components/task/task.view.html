@@ -1,0 +1,12 @@
+<div ng:if="$ctrl.editing">
+	<input ng:model="$ctrl.task.Title" placeholder="title"/>
+	<input ng:model="$ctrl.task.Status" placeholder="status" />
+	<textarea ng:model="$ctrl.task.Description" placeholder="description"></textarea>
+	<button ng:click="$ctrl.update()">Update</button>
+	<button ng:click="$ctrl.cancel()">Cancel</button>
+</div>
+<div ng:if="!$ctrl.editing">
+	<button ng:click="$ctrl.edit()">Edit</button>
+	<div>{{$ctrl.task.Title}}: {{$ctrl.task.Status}}</div>
+	<div>{{$ctrl.task.Description}}</div>
+</div>

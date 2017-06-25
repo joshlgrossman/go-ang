@@ -4,7 +4,7 @@ app.component('tasks', {
 
 	controller: ['$http', '$scope', 'ws', function($http, $scope, ws) {
 
-		$http.get(ws('tasks')).then(response => {
+		$http.get(ws.tasks).then(response => {
 			this.tasks = response.data
 		})
 
