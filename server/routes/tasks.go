@@ -28,7 +28,7 @@ var successJSON = struct {
 func get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	projection := "title, description, status"
+	projection := "id, title, description, status"
 
 	taskRows := squirrel.
 		Select(projection).
@@ -46,7 +46,7 @@ func get(w http.ResponseWriter, r *http.Request) {
 
 		for taskRowsQuery.Next() {
 			var taskModel models.Task
-			err := taskRowsQuery.Scan(&(taskModel.Title), &(taskModel.Description), &(taskModel.Status))
+			err := taskRowsQuery.Scan(&(taskModel.ID), &(taskModel.Title), &(taskModel.Description), &(taskModel.Status))
 			if err == nil {
 				taskModels = append(taskModels, taskModel)
 			}
@@ -84,10 +84,24 @@ func post(w http.ResponseWriter, r *http.Request) {
 			result, _ := json.Marshal(errorJSON)
 			w.Write(result)
 		} else {
+
+			idQuery := squirrel.
+				Select("id").
+				From(tableName).
+				OrderBy("id DESC").
+				Limit(1).
+				RunWith(db.Conn)
+
+			idQuery.QueryRow().Scan(&(taskModel.ID))
+
 			result, _ := json.Marshal(taskModel)
 			w.Write(result)
 		}
 	}
+
+}
+
+func put(w http.ResponseWriter, r *http.Request) {
 
 }
 
