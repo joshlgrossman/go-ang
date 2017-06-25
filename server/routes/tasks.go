@@ -136,6 +136,30 @@ func put(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func delete(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	if val, ok := vars["id"]; ok {
+
+		_, err := squirrel.
+			Delete("").
+			From(tableName).
+			Where(squirrel.Eq{"id": val}).
+			RunWith(db.Conn).
+			Exec()
+
+		if err != nil {
+			result, _ := json.Marshal(errorJSON)
+			w.Write(result)
+		} else {
+			result, _ := json.Marshal(successJSON)
+			w.Write(result)
+		}
+
+	}
+
+}
+
 // TaskRoute endpoint for task related CRUD operations
 func TaskRoute(w http.ResponseWriter, r *http.Request) {
 
@@ -146,6 +170,8 @@ func TaskRoute(w http.ResponseWriter, r *http.Request) {
 		post(w, r)
 	case http.MethodPut:
 		put(w, r)
+	case http.MethodDelete:
+		delete(w, r)
 	default:
 		w.Write([]byte("Unsupported method"))
 	}

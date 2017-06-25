@@ -12,6 +12,10 @@ app.component('tasks', {
 			this.tasks.push(task)
 		})
 
+		$scope.$on('task:deleted', (event, task) => {
+			this.tasks = this.tasks.filter(t => t.ID !== task.ID)
+		})
+
 	}]
 
 })

@@ -25,7 +25,6 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/ws/tasks/{id}", routes.TaskRoute)
 	router.HandleFunc("/ws/tasks", routes.TaskRoute)
-	router.HandleFunc("/ws/test", routes.Test)
 
 	http.Handle("/ws/", router)
 	http.HandleFunc("/", routes.Static("client/build/"))

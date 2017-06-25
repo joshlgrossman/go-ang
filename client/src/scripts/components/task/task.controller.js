@@ -20,6 +20,15 @@ app.component('task', {
 			this.task = this.prev
 			this.editing = false
 		}
+		
+		this.del = () => {
+			$http.delete(ws.tasks + `/${this.task.ID}`).then(response => {
+
+				if(!response.data.error)
+					$scope.$emit('task:deleted', this.task)
+
+			}).catch(console.log)
+		}
 
 		this.update = () => {
 			$http.put(ws.tasks, this.task).then(response => {
