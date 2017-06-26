@@ -1,3 +1,71 @@
+@color-light-grey: #ccc;
+@color-very-light-grey: #eee;
+
+@color-green: #0f8d41;
+@color-yellow: #EC9A29;
+@color-red: #A8201A;
+@color-blue: #143642;
+
+* {
+	box-sizing: border-box;
+}
+
 body {
-	background-color: #eee;
+	background-color: @color-very-light-grey;
+	font-family: sans-serif;
+}
+
+.task {
+
+	display: block;
+	border: 1px solid @color-light-grey;
+	border-radius: 4px;
+	padding: 20px;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+
+	+ .task {
+		margin-top: 20px;
+	}
+
+	.container {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;	
+	}
+
+}
+
+.button-mixin(@color:@color-blue){
+	padding: 10px 20px;
+	background-color: lighten(@color, 75%, relative);
+	border: 1px solid @color;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 250ms, border-color 250ms;
+
+	&:hover {
+		background-color: lighten(@color, 90%, relative);
+		border-color: lighten(@color, 50%, relative);
+	}
+}
+
+button {
+
+	display: block;
+	width: 100%;
+
+	+ button {
+		margin-top: 4px;
+	}
+
+	.button-mixin();
+
+	&.delete {
+		.button-mixin(@color-red);
+	}
+
+	&.update {
+		.button-mixin(@color-green);
+	}
+
 }
