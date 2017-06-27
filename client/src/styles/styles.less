@@ -1,10 +1,39 @@
+@color-white: #fff;
 @color-light-grey: #ccc;
 @color-very-light-grey: #eee;
+@color-dark-grey: #333;
 
 @color-green: #0f8d41;
 @color-yellow: #EC9A29;
 @color-red: #A8201A;
 @color-blue: #143642;
+
+.button-mixin(@color:@color-white, @bg-color:@color-blue){
+	background-color: lighten(@bg-color, 75%, relative);
+	border: 1px solid @bg-color;
+	color: @color;
+	
+	&:hover {
+		background-color: lighten(@bg-color, 90%, relative);
+		border-color: lighten(@bg-color, 50%, relative);
+	}
+}
+
+.input-mixin(){
+	border-radius: 4px;
+	padding: 8px 16px;
+	background-color: @color-white;
+	border: 1px solid @color-light-grey;
+	font-family: sans-serif;
+	color: @color-dark-grey;
+	outline: none;
+	resize: none;
+
+	&:focus {
+		box-shadow: 0 0 3px lighten(@color-blue, 200%, relative);
+	}
+	 
+}
 
 * {
 	box-sizing: border-box;
@@ -18,14 +47,12 @@ body {
 .task {
 
 	display: block;
-	border: 1px solid @color-light-grey;
-	border-radius: 4px;
 	padding: 20px;
+	border: 1px solid @color-light-grey;
 	box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-
-	+ .task {
-		margin-top: 20px;
-	}
+	border-radius: 4px;
+	margin-bottom: 20px;
+	background-color: @color-white;
 
 	.container {
 		display: flex;
@@ -33,39 +60,98 @@ body {
 		align-items: center;	
 	}
 
-}
+	.details {
+		width: 100%;
+		padding-right: 20px;
 
-.button-mixin(@color:@color-blue){
-	padding: 10px 20px;
-	background-color: lighten(@color, 75%, relative);
-	border: 1px solid @color;
-	border-radius: 4px;
-	cursor: pointer;
-	transition: background-color 250ms, border-color 250ms;
+		.top-details {
+			display: flex;
+			width: 100%;
+			margin-bottom: 20px;
 
-	&:hover {
-		background-color: lighten(@color, 90%, relative);
-		border-color: lighten(@color, 50%, relative);
+			input {
+				width: 48%;
+				margin-right: 2%;
+				.input-mixin();
+
+				+ input {
+					margin-right: 0;
+					margin-left: 2%;
+				}
+			}
+
+		}
+
+		textarea {
+			width: 100%;
+			.input-mixin();
+		}
+
 	}
+
+	.title {
+		font-weight: bold;
+		text-transform: uppercase;
+		vertical-align: middle;
+
+		&::after {
+			content: ':';
+			margin-right: 10px;
+		}
+	}
+
+	.status {
+		font-weight: lighter;
+		font-size: 12px;
+		vertical-align: middle;
+	}
+
+	.description {
+		margin-top: 20px;
+	}
+
 }
+
 
 button {
 
 	display: block;
 	width: 100%;
+	border-radius: 4px;
+	cursor: pointer;
+	padding: 10px 20px;
+	transition: background-color 250ms, border-color 250ms;
 
 	+ button {
 		margin-top: 4px;
 	}
 
-	.button-mixin();
+	.button-mixin(@color: @color-white);
 
 	&.delete {
-		.button-mixin(@color-red);
+		.button-mixin(@bg-color: @color-red);
 	}
 
 	&.update {
-		.button-mixin(@color-green);
+		.button-mixin(@bg-color: @color-green);
+	}
+
+}
+
+.task-form {
+	display: block;
+	width: 100%;
+	padding: 20px;
+	border: 1px solid @color-light-grey;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+	border-radius: 4px;
+	background-color: @color-white;
+
+	input, textarea {
+		display: block;
+		width: 100%;
+		margin-bottom: 20px;
+		.input-mixin();
 	}
 
 }

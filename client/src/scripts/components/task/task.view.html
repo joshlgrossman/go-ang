@@ -1,7 +1,9 @@
 <div ng:if="$ctrl.editing" class="container">
-	<div class="detials">
-		<input ng:model="$ctrl.task.Title" placeholder="title"/>
-		<input ng:model="$ctrl.task.Status" placeholder="status" />
+	<div class="details">
+		<div class="top-details">
+			<input ng:model="$ctrl.task.Title" placeholder="title"/>
+			<input ng:model="$ctrl.task.Status" placeholder="status"/>
+		</div>
 		<textarea ng:model="$ctrl.task.Description" placeholder="description"></textarea>
 	</div>
 	<div class="actions">
